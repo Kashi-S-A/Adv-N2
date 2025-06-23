@@ -2,10 +2,11 @@ package com.ty.crud;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class Insert {
+public class Fetch {
 
 	public static void main(String[] args) {
 		String driver = "org.postgresql.Driver";
@@ -26,15 +27,23 @@ public class Insert {
 			Statement stm = con.createStatement();
 			System.out.println("Statement created successfully");
 
-			String sql = "INSERT INTO emp VALUES(103,'Tony',90000)";
+			String sql = "SELECT * FROM emp";
 
 			// Step 4: Execute the SQL query
-			boolean result = stm.execute(sql);
-			System.out.println(result);
-			System.out.println("Record inserted successfully");
+			ResultSet rs = stm.executeQuery(sql);
+
+			System.out.println("=============Employees=============");
+
+			while (rs.next()) {
+				System.out.println("eid : " + rs.getInt(1));
+				System.out.println("ename : " + rs.getString(2));
+				System.out.println("salary : " + rs.getDouble(3));
+				System.out.println("--------------------------------");
+			}
 
 			// Step 5: Close the connection
 			con.close();
+
 			System.out.println("Connection closed successfully");
 
 		} catch (ClassNotFoundException e) {
