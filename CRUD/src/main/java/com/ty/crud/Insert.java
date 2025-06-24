@@ -26,11 +26,18 @@ public class Insert {
 			Statement stm = con.createStatement();
 			System.out.println("Statement created successfully");
 
-			String sql = "INSERT INTO emp VALUES(103,'Tony',90000)";
+//			String sql = "INSERT INTO emp VALUES(107,'Tony',90000)";//1 row affected
+
+			String sql = "DELETE FROM emp WHERE name = 'Tony'";// 3 rows affected
+
+//			String sql = "SELECT * FROM emp";//Exception : A result was returned when none was expected.
 
 			// Step 4: Execute the SQL query
-			boolean result = stm.execute(sql);
-			System.out.println(result);
+//			boolean result = stm.execute(sql);
+
+			int result = stm.executeUpdate(sql); // Use executeUpdate for INSERT, UPDATE, DELETE statements
+
+			System.out.println("The no of rows affected : " + result);
 			System.out.println("Record inserted successfully");
 
 			// Step 5: Close the connection

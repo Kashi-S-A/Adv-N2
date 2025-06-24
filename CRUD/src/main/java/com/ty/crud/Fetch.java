@@ -29,7 +29,12 @@ public class Fetch {
 
 			String sql = "SELECT * FROM emp";
 
+			String sql1 = "INSERT INTO emp VALUES(106,'Steve',80000)";
+
 			// Step 4: Execute the SQL query
+//			ResultSet rs = stm.executeQuery(sql1);// This line is incorrect; it should be executeQuery for SELECT
+			// statements
+
 			ResultSet rs = stm.executeQuery(sql);
 
 			System.out.println("=============Employees=============");
