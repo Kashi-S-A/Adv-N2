@@ -27,7 +27,7 @@ public class Fetch {
 			Statement stm = con.createStatement();
 			System.out.println("Statement created successfully");
 
-			String sql = "SELECT * FROM emp";
+			String sql = "SELECT * FROM";
 
 			String sql1 = "INSERT INTO emp VALUES(106,'Steve',80000)";
 
