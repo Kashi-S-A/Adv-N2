@@ -1,3 +1,5 @@
+<%@page import="java.util.ArrayList"%>
+<%@page import="java.util.List"%>
 <%@page import="com.ty.User"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" isELIgnored="false"%>
@@ -9,6 +11,11 @@
 </head>
 <body>
 	<h1>User Details</h1>
+	
+	<%
+		List<String> list=new ArrayList<String>();
+	%>
+	
 
 	<%
 	String name = (String) request.getAttribute("userName");
