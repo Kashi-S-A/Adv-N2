@@ -12,7 +12,7 @@ public class Fetch {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("dev");
 		EntityManager em = emf.createEntityManager();
 
-		Student fetched = em.find(Student.class, 103);
+		Student fetched = em.find(Student.class, 101);
 
 		if (fetched != null) {
 			System.out.println("Sid : " + fetched.getSid());
