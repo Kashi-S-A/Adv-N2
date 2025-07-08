@@ -1,7 +1,10 @@
 package com.ty.entity;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Product {
@@ -10,6 +13,9 @@ public class Product {
 	private int pid;
 	private String name;
 	private double price;
+
+//	@OneToMany
+//	private List<Review> reviews; //try this: hint-> refer oneToMany bi-direction
 
 	public int getPid() {
 		return pid;
