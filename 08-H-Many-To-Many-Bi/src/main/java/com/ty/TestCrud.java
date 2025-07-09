@@ -30,6 +30,13 @@ public class TestCrud {
 				// fetch operation
 			}
 				break;
+			case 5: {
+				// delete subject
+				System.out.println("enter the subject id to delete");
+				int sid = sc.nextInt();
+				CRUD.deleteSubject(sid);
+			}
+				break;
 			case 7: {
 				// to exit app
 				System.out.println("Thank you!!!!!!");
@@ -65,4 +72,5 @@ public class TestCrud {
 		CRUD.save(student, subjects);
 		System.out.println("saved");
 	}
+
 }

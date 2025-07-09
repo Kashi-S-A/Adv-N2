@@ -51,6 +51,26 @@ public class CRUD {
 
 	}
 
+	public static void deleteSubject(int sid) {
+		Subject sub = em.find(Subject.class, sid);// html
+		if (sub != null) {
+			et.begin();
+			List<Student> students = sub.getStudents();// students who taken html
+			for (Student st : students) {// iterating students one by one
+				List<Subject> subjects = st.getSubjects();// getting all subjects taken students
+				subjects.remove(sub);// from all subjects removing html
+				st.setSubjects(subjects);// update rest of the subjects back to the student.
+				em.merge(st);
+			}
+
+			em.remove(sub);
+			et.commit();
+			System.out.println("Deleted");
+		} else {
+			System.out.println("not found");
+		}
+	}
+
 	public static Student getStudentObj(int sid, String name) {
 		Student s = new Student();
 		s.setId(sid);

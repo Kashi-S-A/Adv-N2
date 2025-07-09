@@ -1,6 +1,7 @@
 package com.ty.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
@@ -11,7 +12,7 @@ public class Car {
 	private int cid;
 	private String brand;
 
-	@OneToOne
+	@OneToOne(fetch = FetchType.LAZY)
 	private Engine engine;
 
 	public Engine getEngine() {

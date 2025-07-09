@@ -3,6 +3,7 @@ package com.ty;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
@@ -13,7 +14,7 @@ public class College {
 	private int id;
 	private String name;
 
-	@OneToMany
+	@OneToMany(fetch = FetchType.LAZY)
 	private List<Student> students;
 
 	public int getId() {

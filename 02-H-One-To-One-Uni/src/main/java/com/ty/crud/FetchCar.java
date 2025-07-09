@@ -13,7 +13,7 @@ public class FetchCar {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("dev");
 		EntityManager em = emf.createEntityManager();
 
-		Car car = em.find(Car.class, 101);
+		Car car = em.find(Car.class, 102);
 
 		if (car != null) {
 			System.out.println("-----------Car-------------");
