@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.CreationTimestamp;
@@ -17,23 +18,24 @@ import org.hibernate.annotations.UpdateTimestamp;
 public class User {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)//to auto generate the id
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "my_seq") // to auto generate the id
+	@SequenceGenerator(name = "my_seq", initialValue = 49, allocationSize = 10)
 	private int uid;
 
-	@Column(name = "user_name")//custom column name
+	@Column(name = "user_name") // custom column name
 	private String name;
 
-	@Column(updatable = false, nullable = false)//constraints
+	@Column(updatable = false, nullable = false) // constraints
 	private String email;
 
 	@Column(unique = true, length = 10)
 	private long phone;
 
-	@CreationTimestamp						//to store data and time at which record is inserted
+	@CreationTimestamp // to store data and time at which record is inserted
 	@Column(updatable = false)
 	private LocalDateTime createdDate;
 
-	@UpdateTimestamp						//to store data and time at which record is updated
+	@UpdateTimestamp // to store data and time at which record is updated
 	private LocalDateTime updatedDate;
 
 	public LocalDateTime getCreatedDate() {

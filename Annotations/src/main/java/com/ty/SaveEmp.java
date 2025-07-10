@@ -5,20 +5,24 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
 import javax.persistence.Persistence;
 
-public class Insert {
-
+public class SaveEmp {
 	public static void main(String[] args) {
 		EntityManagerFactory emf = Persistence.createEntityManagerFactory("dev");
 		EntityManager em = emf.createEntityManager();
 		EntityTransaction et = em.getTransaction();
 
-		User user = new User();
-		user.setName("Manga");
-		user.setEmail("manga@gmail.com");
-		user.setPhone(1214127890);
+		Employee employee = new Employee();
+		employee.setName("manga");
+		employee.setSalary(50000);
+
+		EmployeeId eid = new EmployeeId();
+		eid.setEmail("dingi@gmail.com");
+		eid.setPhone(345679);
+
+		employee.setEid(eid);
 
 		et.begin();
-		em.persist(user);
+		em.persist(employee);
 		et.commit();
 
 		System.out.println("saved");

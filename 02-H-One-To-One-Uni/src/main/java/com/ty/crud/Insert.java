@@ -18,18 +18,18 @@ public class Insert {
 		EntityTransaction et = em.getTransaction();
 
 		Car car = new Car();
-		car.setCid(102);
+		car.setCid(103);
 		car.setBrand("BMW");
 
 		Engine engine = new Engine();
-		engine.setEid(222);
+		engine.setEid(333);
 		engine.setCc(1500);
 		
 		car.setEngine(engine);
 
 		et.begin();
 		em.persist(car);
-		em.persist(engine);
+//		em.persist(engine);
 		et.commit();
 
 		System.out.println("saved");
