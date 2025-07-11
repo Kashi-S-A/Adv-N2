@@ -2,6 +2,7 @@ package com.ty;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.Cacheable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,6 +16,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name = "user_info") // to provide custom name to table
+@Cacheable
 public class User {
 
 	@Id
@@ -37,6 +39,12 @@ public class User {
 
 	@UpdateTimestamp // to store data and time at which record is updated
 	private LocalDateTime updatedDate;
+
+	@Override
+	public String toString() {
+		return "User [uid=" + uid + ", name=" + name + ", email=" + email + ", phone=" + phone + ", createdDate="
+				+ createdDate + ", updatedDate=" + updatedDate + "]";
+	}
 
 	public LocalDateTime getCreatedDate() {
 		return createdDate;
