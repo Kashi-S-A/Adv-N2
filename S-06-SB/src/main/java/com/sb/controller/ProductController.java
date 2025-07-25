@@ -1,6 +1,9 @@
 package com.sb.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,88 +16,38 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sb.entity.Product;
-import com.sb.repo.ProductRepository;
+import com.sb.service.ProductService;
 
 @RestController
 @RequestMapping("/product")
 public class ProductController {
 
-//	private List<Product> products = new ArrayList<>();
-
 	@Autowired
-	private ProductRepository productRepository;
+	private ProductService productService;
+
+	@PostMapping("/save")
+	public String save(@RequestBody Product product) {
+		return productService.saveProduct(product);
+	}
 
 	@GetMapping("/fetch")
 	public Product fetch(@RequestParam(name = "pid") Integer id) {
-//		for (Product product : products) {
-//			if (product.getPid() == id) {
-//				return product;
-//			}
-//		}
-//		return null;
-		return productRepository.findById(id).get();
+		return productService.findByPid(id);
 	}
 
 	@GetMapping("/all")
-	public Iterable<Product> fetchAll() {
-//		return products;
-		return productRepository.findAll();
-	}
-
-	@PostMapping("/save")
-	public String save(@RequestBody Product prod) {
-
-//		for (Product product : products) {
-//			if (product.getPid() == prod.getPid()) {
-//				return "already saved";
-//			}
-//		}
-//		products.add(prod);
-
-		productRepository.save(prod);
-		return "product saved successfully";
+	public List<Product> fetchAll(@RequestParam Integer pageNumber) {
+		return productService.findAll(pageNumber).toList();
 	}
 
 	@DeleteMapping("/del/{pid}")
-	public String del(@PathVariable Integer pid) {
-
-//		for (Product product : products) {
-//			if (product.getPid() == pid) {
-//				products.remove(product);
-//				return "Deleted Successfully";
-//			}
-//		}
-//
-//		return "product not found";
-
-		productRepository.deleteById(pid);
-		return "Deleted successfully";
+	public String deleteById(@PathVariable Integer pid) {
+		return productService.deleteProductById(pid);
 	}
 
 	@PutMapping("/update/{id}")
 	public String update(@PathVariable(name = "id") Integer pid, @RequestBody Product prod) {
-
-//		for (Product product : products) {
-//			if (product.getPid() == pid) {
-//				products.remove(product);
-//				product.setName(prod.getName());
-//				product.setDescription(prod.getDescription());
-//				product.setPrice(prod.getPrice());
-//				products.add(product);
-//			}
-//		}
-		Product product = productRepository.findById(pid).get();
-
-		if (product != null) {
-			product.setName(prod.getName());
-			product.setDescription(prod.getDescription());
-			product.setPrice(prod.getPrice());
-			productRepository.save(product);
-			return "Updated successfully";
-		} else {
-			return "Not found to update";
-		}
-
+		return productService.updateProduct(pid, prod);
 	}
 
 	@GetMapping("/head")
