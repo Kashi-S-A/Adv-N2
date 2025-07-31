@@ -1,11 +1,14 @@
 package com.sb.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.sb.entity.Product;
@@ -35,15 +38,6 @@ public class ProductService {
 		return opt.orElseThrow(() -> new RuntimeException("Prodcut Not Found"));
 	}
 
-	public Page<Product> findAll(Integer pageNumber) {
-
-		Pageable pageable = PageRequest.of(pageNumber-1, 10);// pageNumber starts from by default
-		
-		Page<Product> all = productRepository.findAll(pageable);
-
-		return all;
-	}
-
 	public String deleteProductById(Integer pid) {
 		Optional<Product> opt = productRepository.findById(pid);
 		if (opt.isPresent()) {
@@ -67,5 +61,35 @@ public class ProductService {
 		} else {
 			return "Not found";
 		}
+	}
+
+	public Page<Product> findAll(Integer pageNumber) {
+
+		Pageable pageable = PageRequest.of(pageNumber - 1, 10);// pageNumber starts from by default
+
+		Page<Product> all = productRepository.findAll(pageable);
+
+		return all;
+	}
+
+	public List<Product> sort(String param) {
+		List<Product> products = productRepository.findAll(Sort.by(param).descending());
+		return products;
+	}
+
+	public List<Product> filter(Product product) {
+
+		Example<Product> example = Example.of(product);
+
+		List<Product> all = productRepository.findAll(example);
+		return all;
+	}
+
+	public List<Product> getByPrice(Double price) {
+		return productRepository.getByPrice(price);
+	}
+
+	public List<Product> search(String name) {
+		return productRepository.findByNameContaining(name);
 	}
 }

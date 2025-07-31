@@ -3,7 +3,6 @@ package com.sb.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,9 +50,30 @@ public class ProductController {
 	}
 
 	@GetMapping("/head")
-	public String getMethodName(@RequestHeader String token) {
+	public String head(@RequestHeader String token) {
 		System.out.println(token);
 		return "toke";
 	}
+
+	@GetMapping("/sort")
+	public List<Product> sort(@RequestParam String param) {
+		return productService.sort(param);
+	}
+
+	@GetMapping("/filter")
+	public List<Product> filter(@RequestBody Product product) {
+		return productService.filter(product);
+	}
+
+	@GetMapping("/byprice")
+	public List<Product> byPrice(@RequestParam Double price) {
+		return productService.getByPrice(price);
+	}
+	
+	@GetMapping("/search")
+	public List<Product> search(@RequestParam String name) {
+		return productService.search(name);
+	}
+	
 
 }
