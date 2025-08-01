@@ -9,9 +9,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.util.MultiValueMap;
 
 import com.sb.entity.Product;
+import com.sb.exception.ProductNotFoundException;
 import com.sb.repo.ProductRepository;
 
 @Service
@@ -20,9 +25,12 @@ public class ProductService {
 	@Autowired
 	private ProductRepository productRepository;
 
-	public String saveProduct(Product product) {
+	public ResponseEntity<String> saveProduct(Product product) {
 		Product saved = productRepository.save(product);
-		return "Product saved successfully with id : " + saved.getPid();
+		MultiValueMap<String, String> headers = new HttpHeaders();
+		headers.add("Content-Type", "application/json");
+		return new ResponseEntity<String>("Product saved successfully with id : " + saved.getPid(), headers,
+				HttpStatus.CREATED);
 	}
 
 	public Product findByPid(Integer id) {
@@ -35,16 +43,18 @@ public class ProductService {
 //			throw new RuntimeException("Product Not found");
 //		}
 
-		return opt.orElseThrow(() -> new RuntimeException("Prodcut Not Found"));
+		return opt.orElseThrow(() -> new ProductNotFoundException("Prodcut Not Found"));
 	}
 
-	public String deleteProductById(Integer pid) {
+	public ResponseEntity<String> deleteProductById(Integer pid) {
 		Optional<Product> opt = productRepository.findById(pid);
+
 		if (opt.isPresent()) {
 			productRepository.deleteById(pid);
-			return "Deleted Successfully";
+			return ResponseEntity.ok().body("Deleted Successfully");
 		} else {
-			return "Product Not Found";
+			return new ResponseEntity<String>(HttpStatus.NO_CONTENT);
+//			return ResponseEntity.noContent().build();
 		}
 	}
 
