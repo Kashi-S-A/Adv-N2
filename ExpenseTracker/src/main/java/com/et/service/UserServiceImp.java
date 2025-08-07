@@ -1,7 +1,6 @@
 package com.et.service;
 
 import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
@@ -47,6 +46,11 @@ public class UserServiceImp implements UserService {
 //		}
 
 		return userRepository.findByUsernameAndPassword(username, passwordEncoder.encodePassword(password)).isPresent();
+	}
+
+	@Override
+	public User findByUsername(String username) {
+		return userRepository.findByUsername(username).get();
 	}
 
 }

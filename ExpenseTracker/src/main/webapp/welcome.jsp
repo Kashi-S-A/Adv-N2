@@ -54,9 +54,11 @@
 <body>
     <div class="welcome-container">
         <h1>Welcome to Expense Tracker</h1>
+        <h4 style="color: green">${succmsg}</h4>
         <div class="nav-links">
-            <a href="addExpense.jsp">Add Expense</a>
-            <a href="expenseList.jsp">Expense List</a>
+            <a href="addExpense">Add Expense</a>
+            <a href="expenseList">Expense List</a>
+            <a href="logout">Logout</a>
         </div>
         <p class="description">
             Track and manage your expenses effectively. Use the navigation links to add new expenses or view your expense history.

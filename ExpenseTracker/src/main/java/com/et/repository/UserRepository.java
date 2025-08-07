@@ -5,6 +5,8 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.et.entity.User;
+import java.util.List;
+
 
 
 public interface UserRepository extends JpaRepository<User, Integer> {
@@ -12,4 +14,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 	Optional<User> findByUsernameOrEmail(String username, String email);
 	
 	Optional<User> findByUsernameAndPassword(String username, String password);
+	
+	Optional<User> findByUsername(String username);
 }

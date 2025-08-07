@@ -76,10 +76,7 @@
             <input type="text" id="name" name="name" required>
 
             <label for="amount">Amount:</label>
-            <input type="number" id="amount" name="amount" step="0.01" required>
-
-            <label for="date">Date:</label>
-            <input type="date" id="date" name="date" required>
+            <input type="number" id="amount" name="amount"  required>
 
             <label for="description">Description:</label>
             <textarea id="description" name="description" required></textarea>

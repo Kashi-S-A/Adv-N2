@@ -1,3 +1,5 @@
+<%@page import="com.et.entity.Expense"%>
+<%@page import="java.util.List"%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
@@ -72,6 +74,11 @@
     </style>
 </head>
 <body>
+
+	<%
+		List<Expense> exps =(List<Expense>) request.getAttribute("exps");
+	%>
+
     <div class="container">
         <h2>Expense List</h2>
         <table>
@@ -85,41 +92,44 @@
                 </tr>
             </thead>
             <tbody>
+                
+                <%
+                	if(exps!=null){
+                	for(Expense expense : exps)
+                	{
+                %>
                 <tr>
-                    <td>Lunch with Friends</td>
-                    <td>15.00</td>
-                    <td>09-08-2024</td>
-                    <td>Lunch at the downtown café.</td>
+                    <td><%=expense.getName()%></td>
+                    <td><%=expense.getAmount()%></td>
+                    <td><%=expense.getCreatedDate()%></td>
+                    <td><%=expense.getDescription()%></td>
                     <td class="action-buttons">
                         <a href="editExpense.jsp?id=1" class="edit-btn">Edit</a>
                         <a href="deleteExpense?id=1" class="delete-btn" onclick="return confirm('Are you sure you want to delete this expense?');">Delete</a>
                     </td>
                 </tr>
-                <tr>
-                    <td>Grocery Shopping</td>
-                    <td>45.90</td>
-                    <td>07-08-2024</td>
-                    <td>Bought weekly groceries from supermarket.</td>
-                    <td class="action-buttons">
-                        <a href="editExpense.jsp?id=2" class="edit-btn">Edit</a>
-                        <a href="deleteExpense?id=2" class="delete-btn" onclick="return confirm('Are you sure you want to delete this expense?');">Delete</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Electricity Bill</td>
-                    <td>1200.00</td>
-                    <td>05-08-2024</td>
-                    <td>Monthly electricity bill payment.</td>
-                    <td class="action-buttons">
-                        <a href="editExpense.jsp?id=3" class="edit-btn">Edit</a>
-                        <a href="deleteExpense?id=3" class="delete-btn" onclick="return confirm('Are you sure you want to delete this expense?');">Delete</a>
-                    </td>
-                </tr>
+                <%
+                	}
+                	}
+                	else{
+                		 response.sendRedirect("/");
+                	}
+                %>
                 <!-- Add more dummy rows as needed -->
             </tbody>
         </table>
 
-        <a href="welcome.jsp" class="back-link">← Back to Dashboard</a>
+       <br><br>
+        <form action="filter">
+        	 <label for="date1">From Date:</label>
+            <input type="date" id="date1" name="fromDate" value="${from}" required>
+
+            <label for="date2">To Date:</label>
+            <input type="date" id="date2" name="toDate" value="${to}"  required>
+            
+            <input type="submit" value="Search">
+        </form>
+         <a href="welcome.jsp" class="back-link">← Back to Dashboard</a>
     </div>
 </body>
 </html>
