@@ -9,7 +9,7 @@ public class AppExceptionHandler {
 	@ExceptionHandler(Exception.class)
 	public String handlException(Exception e) {
 		System.out.println(e.getMessage());
-		System.out.println("fdgasfuidjlk");
+		e.printStackTrace();
 		return "error.jsp";
 	}
 

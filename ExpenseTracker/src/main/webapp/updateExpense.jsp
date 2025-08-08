@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -73,16 +72,16 @@
     <div class="form-container">
         <h2>Update Expense</h2>
         <form action="updateExpense" method="post">
-            <input type="hidden" name="id" value="${expense.id}" />
+            <input type="hidden" name="eid" value="${expense.eid}" />
 
             <label for="name">Expense Name:</label>
             <input type="text" id="name" name="name" value="${expense.name}" required>
 
             <label for="amount">Amount:</label>
-            <input type="number" id="amount" name="amount" value="${expense.amount}" step="0.01" required>
+            <input type="number" id="amount" name="amount" value="${expense.amount}" required>
 
             <label for="date">Date:</label>
-            <input type="date" id="date" name="date" value="${expense.date}" required>
+            <input type="date" id="date" name="updateDate" value="${expense.updateDate}" required>
 
             <label for="description">Description:</label>
             <textarea id="description" name="description" required>${expense.description}</textarea>

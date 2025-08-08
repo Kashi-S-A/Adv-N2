@@ -11,4 +11,10 @@ public interface ExpenseService {
 
 	List<Expense> filter(User user, String fromDate, String toDate);
 
+	Expense findById(Integer eid);
+
+	String updateExpense(Expense expense);
+
+	String deleteExpense(Integer eid);
+
 }

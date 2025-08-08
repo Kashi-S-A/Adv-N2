@@ -1,7 +1,6 @@
 package com.et.service;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -27,13 +26,35 @@ public class ExpenseServiceImp implements ExpenseService {
 
 	@Override
 	public List<Expense> filter(User user, String fromDate, String toDate) {
-		
+
 		LocalDate fDate = LocalDate.parse(fromDate);
 		LocalDate tDate = LocalDate.parse(toDate);
 
 		List<Expense> expenses = expenseRepository.findByUserAndCreatedDateBetween(user, fDate, tDate);
-		
+
 		return expenses;
+	}
+
+	@Override
+	public Expense findById(Integer eid) {
+		return expenseRepository.findById(eid).get();
+	}
+
+	@Override
+	public String updateExpense(Expense expense) {
+		Expense ex = findById(expense.getEid());
+		ex.setAmount(expense.getAmount());
+		ex.setDescription(expense.getDescription());
+		ex.setName(expense.getName());
+		ex.setUpdateDate(expense.getUpdateDate());
+		String name = expenseRepository.save(ex).getName();
+		return name + " Expense Updated Successfully";
+	}
+
+	@Override
+	public String deleteExpense(Integer eid) {
+		expenseRepository.deleteById(eid);
+		return "expense with id : " + eid + " is deleted.";
 	}
 
 }

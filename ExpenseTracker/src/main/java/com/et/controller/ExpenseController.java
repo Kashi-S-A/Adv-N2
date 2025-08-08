@@ -102,7 +102,7 @@ public class ExpenseController {
 	}
 
 	@GetMapping("/expenseList")
-	public String getMethodName(HttpServletRequest request, Model model) {
+	public String expenseList(HttpServletRequest request, Model model) {
 
 		HttpSession session = request.getSession(false);
 		String username = (String) session.getAttribute("un");
@@ -115,7 +115,7 @@ public class ExpenseController {
 	}
 
 	@GetMapping("/filter")
-	public String filter(HttpServletRequest request,Model model) {
+	public String filter(HttpServletRequest request, Model model) {
 		String fromDate = request.getParameter("fromDate");
 		String toDate = request.getParameter("toDate");
 
@@ -125,12 +125,84 @@ public class ExpenseController {
 		User user = userService.findByUsername(username);
 
 		List<Expense> expenses = expenseService.filter(user, fromDate, toDate);
-		
+
 		model.addAttribute("exps", expenses);
 		model.addAttribute("from", fromDate);
-		model.addAttribute("to",toDate);
+		model.addAttribute("to", toDate);
 
 		return "expenseList.jsp";
+	}
+
+	@GetMapping("/editExpense")
+	public String updateExpense(HttpServletRequest request, Model model) {
+		Integer eid = Integer.parseInt(request.getParameter("eid"));
+
+		Expense expense = expenseService.findById(eid);
+
+		model.addAttribute("expense", expense);
+
+		return "updateExpense.jsp";
+	}
+
+	@PostMapping("/updateExpense")
+	public String postMethodName(Expense expense, Model model) {
+		System.out.println(expense.getEid());
+		System.out.println(expense.getDescription());
+		System.out.println(expense.getName());
+		System.out.println(expense.getAmount());
+		System.out.println(expense.getUpdateDate());
+
+		String msg = expenseService.updateExpense(expense);
+		model.addAttribute("succmsg", msg);
+
+		return "welcome.jsp";
+	}
+
+	@GetMapping("/deleteExpense")
+	public String deleteExpense(HttpServletRequest request, Model model) {
+		Integer eid = Integer.parseInt(request.getParameter("eid"));
+
+		String msg = expenseService.deleteExpense(eid);
+
+		model.addAttribute("succmsg", msg);
+
+		return "welcome.jsp";
+	}
+
+	@PostMapping("/forgot-password")
+	public String forgotPwd(HttpServletRequest request, Model model) throws Exception {
+		String emailusername = request.getParameter("emailusername");
+
+		String msg = userService.forgotPwd(request, emailusername);
+
+		model.addAttribute("msg", msg);
+
+		return "reset-password.jsp";
+	}
+
+	@PostMapping("/reset-password")
+	public String postMethodName(HttpServletRequest request, Model model) {
+//		String email = request.getParameter("email");
+		String newPwd = request.getParameter("newPassword");
+		String otp = request.getParameter("otp");
+
+		HttpSession session = request.getSession(false);
+
+		String sessionOtp = (String) session.getAttribute("otp");
+		String username=(String)session.getAttribute("un");
+		
+		System.out.println(otp);
+		System.out.println(sessionOtp);
+		if (otp.equals(sessionOtp)) {
+			System.out.println("changed");
+			String message = userService.resetPassword(username, newPwd);
+
+			model.addAttribute("succmsg", message);
+		} else {
+			System.out.println("fjhdsakjl");
+			model.addAttribute("errmsg", "Incorrect otp");
+		}
+		return "login.jsp";
 	}
 
 	@GetMapping("/logout")

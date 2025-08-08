@@ -104,8 +104,8 @@
                     <td><%=expense.getCreatedDate()%></td>
                     <td><%=expense.getDescription()%></td>
                     <td class="action-buttons">
-                        <a href="editExpense.jsp?id=1" class="edit-btn">Edit</a>
-                        <a href="deleteExpense?id=1" class="delete-btn" onclick="return confirm('Are you sure you want to delete this expense?');">Delete</a>
+                        <a href="editExpense?eid=<%= expense.getEid() %>" class="edit-btn">Edit</a>
+                        <a href="deleteExpense?eid=<%= expense.getEid() %>" class="delete-btn" onclick="return confirm('Are you sure you want to delete this expense?');">Delete</a>
                     </td>
                 </tr>
                 <%

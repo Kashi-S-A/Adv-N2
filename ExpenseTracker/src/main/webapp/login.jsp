@@ -84,7 +84,8 @@
             <button type="submit">Login</button>
         </form>
         <div class="register-link">
-            <a href="register">New user ? Register here</a>
+            <a href="register">New user ? Register here</a><br><br>
+            <a href="forgotPwd.jsp">Forgot Password ? </a>
         </div>
     </div>
 </body>
