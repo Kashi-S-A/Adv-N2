@@ -24,9 +24,9 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity.csrf(csrf -> csrf.disable())
 					.authorizeHttpRequests(auth -> auth
-					.requestMatchers("/admin/**").hasRole("ADMIN")
-					.requestMatchers("/user/**").hasAnyRole("USER","ADMIN")
-					.requestMatchers("/register").permitAll()
+					.requestMatchers("/api/hotels/**","/api/rooms/**").hasRole("ADMIN")
+					.requestMatchers("/api/bookings/**").hasAnyRole("USER")
+					.requestMatchers("/api/auth/**","/h2-console","/contact","/help").permitAll()
 					.anyRequest().authenticated())
 					.formLogin(form -> form.permitAll())
 					.logout(logout -> logout.permitAll());
