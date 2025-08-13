@@ -30,8 +30,11 @@ public class Room {
 
 	private Double price;
 
+//	@OneToOne
+//	private Available avail;
+
 	private Boolean availability;
-	
+
 	@CreationTimestamp
 	@Column(updatable = false)
 	private LocalDateTime createdDate;
