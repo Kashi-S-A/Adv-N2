@@ -16,7 +16,7 @@ import com.hotel.entity.Hotel;
 import com.hotel.repo.HotelRepo;
 
 @RestController
-@RequestMapping("/api/hotels/")
+@RequestMapping("/api/hotels")
 public class HotelController {
 
 	private final HotelRepo hotelRepo;
@@ -32,6 +32,8 @@ public class HotelController {
 
 	@GetMapping
 	public ResponseEntity<List<Hotel>> getAll(@RequestParam(required = false) String name) {
+		if(name==null)
+			return ResponseEntity.status(HttpStatus.OK).body(hotelRepo.findAll());
 		return ResponseEntity.status(HttpStatus.OK).body(hotelRepo.findByNameContainingAllIgnoreCase(name));
 	}
 

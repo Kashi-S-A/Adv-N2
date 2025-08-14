@@ -39,8 +39,8 @@ public class BookingController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<Hotel>> search(@RequestParam String nameOrLocation) {
-		return ResponseEntity.ok(hotelRepo.findByLocationOrNameContainingAllIgnoreCase(nameOrLocation));
+	public ResponseEntity<List<Hotel>> search(@RequestParam String name) {
+		return ResponseEntity.ok(hotelRepo.findByNameContainingAllIgnoreCase(name));
 	}
 
 	@GetMapping("/{id}")

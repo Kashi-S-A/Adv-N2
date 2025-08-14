@@ -1,5 +1,6 @@
 package com.hotel.service;
 
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +14,8 @@ import com.hotel.entity.User;
 import com.hotel.repo.BookingRepo;
 import com.hotel.repo.RoomRepo;
 import com.hotel.repo.UserRepo;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class BookingService {
@@ -31,43 +34,20 @@ public class BookingService {
 
 	public String createBooking(BookingRequestDTO bookingDto) {
 		long days = ChronoUnit.DAYS.between(bookingDto.getCheckIn(), bookingDto.getCheckOut());
-
 		if (days <= 0)
 			throw new RuntimeException("Enter valid date");
-		// check for user
-		User user = userRepo.findById(bookingDto.getUserId()).orElseThrow(() -> new RuntimeException("Use Not found"));
-		// Rooms available
-		double priceOfAllRooms = 0;
+
+		User user = userRepo.findById(bookingDto.getUserId()).orElseThrow(() -> new RuntimeException("User Not found"));
+
+		List<Booking> conflicts = bookingRepo.findConflictingBookings(bookingDto.getRoomIds(), bookingDto.getCheckIn(),
+				bookingDto.getCheckOut());
+
+		if (!conflicts.isEmpty()) {
+			throw new RuntimeException("One or more rooms are already booked for these dates");
+		}
 
 		List<Room> rooms = roomRepo.findAllById(bookingDto.getRoomIds());
-
-		for (Room room : rooms) {
-			if (!room.getAvailability()) {
-				throw new RuntimeException("Room with id : " + room.getId() + " is not available");
-			}
-		}
-
-//		for (Room room : rooms) {
-//			if ((room.getAvail().getAvailable()
-//					&& room.getAvail().getDate().toString().equals(bookingDto.getCheckIn().toString()))) {
-//				Stream<LocalDate> dates = bookingDto.getCheckIn().datesUntil(bookingDto.getCheckOut());
-//				throw new RuntimeException("Room with id : " + room.getId() + " is not available");
-//			}
-//			priceOfAllRooms += room.getPrice();
-//		}
-		// Days
-
-		// totalAmount
-
-		Double totalPrice = priceOfAllRooms * days;
-
-		// service for payment
-
-		// if pay is succ save booking -> confirmed
-		for (Room room : rooms) {
-			room.setAvailability(false);
-			roomRepo.save(room);
-		}
+		double totalPrice = rooms.stream().mapToDouble(Room::getPrice).sum() * days;
 
 		Booking booking = new Booking();
 		booking.setUser(user);
@@ -77,29 +57,36 @@ public class BookingService {
 		booking.setTotalAmount(totalPrice);
 		booking.setStatus("CONFIRMED");
 
-		return "Booking Confirmed Your Booking Id is : " + bookingRepo.save(booking).getId();
+		bookingRepo.save(booking);
 
+		return "Booking Confirmed. Booking_ID: " + booking.getId();
 	}
 
 	public Optional<Booking> findById(Long id) {
 		return bookingRepo.findById(id);
 	}
 
-	public void cancelBooking(Long id) {
-		Booking booking = bookingRepo.findById(id).orElseThrow(() -> new RuntimeException("Booking Not Found"));
-		if (!booking.getStatus().equals("CONFIRMED")) {
-			throw new RuntimeException("Already Canceled");
-		} else {
-			booking.setStatus("CANCELED");
+	@Transactional
+	public String cancelBooking(Long bookingId) {
+		Booking booking = bookingRepo.findById(bookingId).orElseThrow(() -> new RuntimeException("Booking not found"));
+
+		// Check if already canceled
+		if ("CANCELLED".equalsIgnoreCase(booking.getStatus())) {
+			throw new RuntimeException("Booking is already cancelled");
 		}
-		List<Room> rooms = booking.getRooms();
-		for (Room room : rooms) {
-			room.setAvailability(true);
-			roomRepo.save(room);
+
+		// Optional: Prevent canceling if check-in has already started
+		if (!LocalDate.now().isBefore(booking.getCheckIn())) {
+			throw new RuntimeException("Cannot cancel after check-in date");
 		}
-		// repay the money
-		Double totalAmount = booking.getTotalAmount();
-		bookingRepo.save(booking);
+
+		// Update booking status
+		booking.setStatus("CANCELLED");
+		Booking saved = bookingRepo.save(booking);
+		
+		Double totalAmount = saved.getTotalAmount();//return this amount back to the customer
+
+		return "Booking ID " + bookingId + " has been cancelled successfully.";
 	}
 
 }
